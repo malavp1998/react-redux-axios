@@ -9,8 +9,8 @@ import { setProducts } from "../redux/actions/productActions";
 
 const ProductListing = () => {
 
-    //const products = useSelector((state) => state)// getting data from redux store  (state)
-    //console.log(products)
+    const products = useSelector((state) => state)// getting data from redux store  (state)
+    console.log(products)
 
     //to store the data we are getting from the api we have to dispatch an action
     const dispatch = useDispatch()
@@ -18,7 +18,7 @@ const ProductListing = () => {
     const fetchProducts = async () => {
 
         //  const response = await axios.get(`https://fakestoreapi.com/products`)  
-        const response = await axios.get(`https://fakestoreapi.com/products`)
+        const response = await axios.get(`https://api.spacexdata.com/v3/launches`)
             .catch((err) => {
                 console.log("err ", err)
             });
@@ -35,7 +35,7 @@ const ProductListing = () => {
 
     return (
         <div className="ui grid container">
-            <ProductComponant />
+             <ProductComponant /> 
             {/* <h1>Chla ki nahi</h1> */}
         </div>
     )
