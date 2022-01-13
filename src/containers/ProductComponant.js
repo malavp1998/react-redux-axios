@@ -12,7 +12,7 @@ class ProductComponant extends Component {
 
     render() {
         //const products = useSelector((state) => state.allProducts.products);
-        const {products} = this.props;
+        const { products } = this.props;
         return (
             <div>
                 {
@@ -22,22 +22,22 @@ class ProductComponant extends Component {
                         const { flight_number, details, links, launch_success, launch_year } = product;
                         const { mission_patch } = links;
                         //console.log(product)
-                       return(
-                       <div className="four wide column" key={flight_number}>
-                            <div className="ui link cards">
-                                <div className="card">
-                                    <div className="image">
-                                        <img className="ui small image" src={mission_patch} alt={details} />
-                                    </div>
-                                    <div className="content">
-                                        <div className="header">{details}</div>
-                                        <div className="meta price">{flight_number}</div>
-                                        <div className="meta">{launch_success}</div>
-                                        <div className="meta">{launch_year}</div>
+                        return (
+                            <div className="four wide column" key={flight_number}>
+                                <div className="ui link cards">
+                                    <div className="card">
+                                        <div className="image">
+                                            <img className="ui small image" src={mission_patch} alt={details} />
+                                        </div>
+                                        <div className="content">
+                                            <div className="header">{details}</div>
+                                            <div className="meta price">{flight_number}</div>
+                                            <div className="meta">{launch_success}</div>
+                                            <div className="meta">{launch_year}</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>)
+                            </div>)
                     })
                 }
             </div>
@@ -47,7 +47,7 @@ class ProductComponant extends Component {
 
 function mapStateToProps(state) {
     return {
-        products : state.allProducts.products
+        products: state.allProducts.products
     };
 }
 

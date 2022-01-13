@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import ProductComponant from "./ProductComponant";
 import axios from "axios";
 import { setProducts } from "../redux/actions/productActions";
-
-
+import ButtonExampleButton from "./Filter";
+import Filter from "./Filter";
 
 const ProductListing = () => {
 
@@ -35,8 +35,8 @@ const ProductListing = () => {
 
     return (
         <div className="ui grid container">
-             <ProductComponant /> 
-            {/* <h1>Chla ki nahi</h1> */}
+            
+              <ProductComponant /> 
         </div>
     )
 }
