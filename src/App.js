@@ -1,21 +1,22 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Header from './containers/Header';
-import ProductListing from './containers/ProductListing';
-import ProductDetails from './containers/ProductDeataits';
+import HeaderComponent from './containers/HeaderComponent';
+import ProductListing from "./containers/ProductListing";
+import FilterComponent from "./containers/FilterComponent";
+import { Segment } from 'semantic-ui-react'
+import React from "react";
 
 
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/" exact element={<ProductListing />} />
-          <Route path="/product/:productId" exact element={<ProductDetails/>} />
-          <Route>404 Not Found!</Route>
-        </Routes>
-      </Router>
+        <Segment.Group>
+            <Segment> <HeaderComponent /> </Segment>
+            <Segment.Group horizontal>
+                <Segment compact={true}> <FilterComponent /></Segment>
+                <Segment compact={true}> <FilterComponent /></Segment>
+            </Segment.Group>
+            <Segment><ProductListing /></Segment>
+        </Segment.Group>
     </div>
   );
 }

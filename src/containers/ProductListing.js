@@ -4,13 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import ProductComponant from "./ProductComponant";
 import axios from "axios";
 import { setProducts } from "../redux/actions/productActions";
-import ButtonExampleButton from "./Filter";
-import Filter from "./Filter";
+import FilterComponent from "./FilterComponent";
 
 const ProductListing = () => {
 
     const products = useSelector((state) => state)// getting data from redux store  (state)
-    console.log(products)
 
     //to store the data we are getting from the api we have to dispatch an action
     const dispatch = useDispatch()
@@ -34,9 +32,8 @@ const ProductListing = () => {
 
 
     return (
-        <div className="ui grid container">
-            
-              <ProductComponant /> 
+        <div>
+            <ProductComponant />
         </div>
     )
 }

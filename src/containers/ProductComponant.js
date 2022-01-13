@@ -7,20 +7,30 @@ class ProductComponant extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            rocketSearch: undefined,
+            launchDate: undefined,
+            upcoming: undefined
         };
+        this.filterProduct = this.filterProduct.bind(this);
+    }
+
+    filterProduct(product) {
+        const {launchStatus}  = this.props;
+        if(launchStatus === undefined) {
+            return true;
+        }
+        return product.launch_success === launchStatus;
     }
 
     render() {
         //const products = useSelector((state) => state.allProducts.products);
         const { products } = this.props;
+        const productsFiltered = products.filter(this.filterProduct);
         return (
             <div>
                 <Grid columns={4} padded>
                     {
-                        products.map((product) => {
-                            console.log("my");
-                            console.log(product);
+                        productsFiltered.map((product) => {
                             const { flight_number, mission_name, launch_site, rocket, details, links, launch_success, launch_year } = product;
                             const { mission_patch } = links;
                             const {site_name_long} = launch_site;
@@ -64,7 +74,8 @@ class ProductComponant extends Component {
 
 function mapStateToProps(state) {
     return {
-        products: state.allProducts.products
+        products: state.allProducts.products,
+        launchStatus: state.filters.launchStatus
     };
 }
 
@@ -78,33 +89,3 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductComponant);
-
-// const ProductComponent = () => {
-//     const products = useSelector((state) => state.allProducts.products);
-//     const renderList = products.map((product) => {
-
-//         const { flight_number, details, links, launch_success, launch_year } = product;
-//         const {mission_patch} = links;
-//         console.log(product)
-//         return (
-//             <div className="four wide column" key={flight_number}>
-//                     <div className="ui link cards">
-//                         <div className="card">
-//                             <div className="image">
-//                             <img className="ui small image" src={mission_patch} alt={details} />
-//                             </div> 
-//                             <div className="content">
-//                             <div className="header">{details}</div>
-//                                 <div className="meta price">{flight_number}</div>
-//                                 <div className="meta">{launch_success}</div>
-//                                 <div className="meta">{launch_year}</div>
-//                             </div>
-//                         </div>
-//                     </div>
-//             </div>
-//         );
-//     });
-//     return <>{renderList}</>;
-// };
-
-// export default ProductComponent;
