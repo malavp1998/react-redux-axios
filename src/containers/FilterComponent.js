@@ -23,7 +23,7 @@ class FilterComponent extends Component {
     render() {
         return (
             <div>
-                <Header as='h2'>Filters</Header>
+                {/* <Header as='h2'>Filters</Header> */}
                 <Form>
                     <Form.Field>
                         Launch Status
