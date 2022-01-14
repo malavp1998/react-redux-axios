@@ -1,15 +1,15 @@
 import { ActionTypes } from "../constants/action-types"
 
 const intialState = {
-    products : [
+    missions : [
     ]
 }
 
-export const productReducer = (state = intialState , { type, payload }) =>{
+export const missionReducer = (state = intialState , { type, payload }) =>{
     switch(type)
     {
         case ActionTypes.SET_MISSIONS:
-            return {...state, products : payload};
+            return {...state, missions : payload};
         default:
             return state;
     }

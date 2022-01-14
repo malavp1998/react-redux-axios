@@ -1,13 +1,13 @@
 
 import { combineReducers } from "redux";
-import { productReducer } from "./productsReducer";
+import { missionReducer } from "./missionReducer";
 import {filterReducer} from "./filterReducer";
 import { searchReducer } from "./seachReducer";
 
 
 const reducers = combineReducers(
     {
-        allProducts : productReducer,
+        allMissions : missionReducer,
         filters: filterReducer,
         search : searchReducer
     }

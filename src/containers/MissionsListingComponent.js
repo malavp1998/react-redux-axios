@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { Card, Icon, Image, Grid, Popup } from 'semantic-ui-react';
 import React, { Component } from 'react'
-import {setMissions} from "../redux/actions/productActions";
+import {setMissions} from "../redux/actions/missionActions";
 
 class MissionsListingComponent extends Component {
 
@@ -12,16 +12,16 @@ class MissionsListingComponent extends Component {
             launchDate: undefined,
             upcoming: undefined
         };
-        this.filterAndSearchProduct = this.filterAndSearchProduct.bind(this)
+        this.filterAndSearchMissions = this.filterAndSearchMissions.bind(this)
     }
 
     componentDidMount() {
         this.props.setMissions();
     }
 
-    filterAndSearchProduct(product) {
+    filterAndSearchMissions(mission) {
         const { launchStatus, rocketName } = this.props;
-        const { rocket } = product;
+        const { rocket } = mission;
         if (launchStatus === undefined && rocketName === "") {
             return true;
         }
@@ -29,30 +29,33 @@ class MissionsListingComponent extends Component {
             return rocket.rocket_name.toLowerCase().startsWith(rocketName.toLowerCase());
         }
         else if (rocketName === "") {
-            return (product.launch_success === launchStatus);
+            return (mission.launch_success === launchStatus);
         }
         else {
-            return (product.launch_success === launchStatus) && rocket.rocket_name.toLowerCase().startsWith(rocketName.toLowerCase());
+            return (mission.launch_success === launchStatus)
+                && rocket.rocket_name.toLowerCase().startsWith(rocketName.toLowerCase());
         }
 
     }
 
     render() {
         //const products = useSelector((state) => state.allProducts.products);
-        const { products } = this.props;
-        const productsFiltered = products.filter(this.filterAndSearchProduct);
+        const { missions } = this.props;
+        const missionsFiltered = [...new Set(missions.filter(this.filterAndSearchMissions))];
+        console.log("current")
+        console.log(missionsFiltered)
         return (
             <div>
                 <Grid columns={4} padded>
                     {
-                        productsFiltered.map((product) => {
+                        missionsFiltered.map((mission) => {
                             // console.log("in rend");
-                            // console.log(product);
-                            const { flight_number, mission_name, launch_site, rocket, details, links, launch_success, launch_year } = product;
+                            // console.log(mission);
+                            const { flight_number, mission_name, launch_site, rocket, details, links, launch_success, launch_year } = mission;
                             const { mission_patch } = links;
                             const { site_name_long } = launch_site;
                             const { rocket_name } = rocket;
-                            //console.log(product)
+                            //console.log(mission)
                             return (
                                 <Grid.Column key={flight_number}>
                                     <Popup
@@ -91,7 +94,7 @@ class MissionsListingComponent extends Component {
 
 function mapStateToProps(state) {
     return {
-        products: state.allProducts.products,
+        missions: state.allMissions.missions,
         launchStatus: state.filters.launchStatus,
         rocketName: state.search.rocketName
     };
