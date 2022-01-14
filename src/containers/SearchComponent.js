@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Search, Header} from 'semantic-ui-react'
+import {Search, Form} from 'semantic-ui-react'
 import { connect } from "react-redux";
 import { setRocketName } from '../redux/actions/searchAction';
 
@@ -13,14 +13,16 @@ class SearchComponent extends Component {
     render() {
         return (
             <div>
-                <Header as='h3'>Search</Header>
-                <label><b>Rocket Name </b> </label>
-                <Search
-                    onSearchChange={this.handleSearch}
-                    showNoResults = {false}
-                    value={this.props.rocketName}
-                />
-                {/*<input placeholder='Search'  onChange ={this.handleSearch}/>*/}
+                <Form>
+                    <Form.Field>
+                        <label>Rocket Name (real time search)</label>
+                        <Search
+                            onSearchChange={this.handleSearch}
+                            showNoResults = {false}
+                            value={this.props.rocketName}
+                        />
+                    </Form.Field>
+                </Form>
             </div>
         )
     }

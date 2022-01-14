@@ -75,22 +75,21 @@ class MissionsListingComponent extends Component {
     }
 
     render() {
-        //const products = useSelector((state) => state.allProducts.products);
         const { missions } = this.props;
-        const missionsFiltered = [...new Set(missions.filter(this.combineFilters))];
+        const missionsFiltered = missions.filter(this.combineFilters);
         return (
             <div>
                 <Grid columns={4} padded>
                     {
                         missionsFiltered.map((mission) => {
-                            const { flight_number, mission_name, launch_site, launch_date_utc, upcoming,
+                            const { mission_name, launch_site, launch_date_utc, upcoming,
                                 rocket, details, links, launch_success, launch_year } = mission;
                             const { mission_patch } = links;
                             const { site_name_long } = launch_site;
                             const { rocket_name } = rocket;
                             const launchDate = new Date(launch_date_utc);
                             return (
-                                <Grid.Column key={flight_number}>
+                                <Grid.Column key={mission_name}>
                                     <Popup
                                         trigger={
                                             <Card>
