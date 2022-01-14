@@ -13,3 +13,10 @@ export const updateUpcomingStatusFilter = (upcomingStatus) => {
         payload: upcomingStatus
     };
 };
+
+export const updateLaunchDateFilter = (upcomingStatus) => {
+    return {
+        type: ActionTypes.SET_LAUNCH_DATE_FILTER,
+        payload: upcomingStatus
+    };
+};

@@ -6,6 +6,7 @@ import React from "react";
 import SearchComponent from './containers/SearchComponent';
 import MissionsListingComponent from "./containers/MissionsListingComponent";
 import UpcomingFilterCompnent from "./containers/UpcomingFilterCompnent";
+import LaunchDateFilterComponent from "./containers/LaunchDateFilterComponent";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Segment.Group horizontal>
               <Segment><LaunchFilterComponent/></Segment>
               <Segment><UpcomingFilterCompnent/></Segment>
+              <Segment><LaunchDateFilterComponent/></Segment>
             </Segment.Group>
 
           </Segment.Group> </Segment>

@@ -2,6 +2,7 @@ import {connect} from "react-redux";
 import {Card, Grid, Icon, Image, Popup} from 'semantic-ui-react';
 import React, {Component} from 'react'
 import {setMissions} from "../redux/actions/missionActions";
+import {LaunchDateFilterConstants} from "./LaunchDateFilterConstants";
 
 class MissionsListingComponent extends Component {
 
@@ -17,6 +18,7 @@ class MissionsListingComponent extends Component {
         this.filterBasedOnRocketSearch = this.filterBasedOnRocketSearch.bind(this);
         this.filterBasedOnLaunchStatus = this.filterBasedOnLaunchStatus.bind(this);
         this.filterBasedOnUpcomingStatus = this.filterBasedOnUpcomingStatus.bind(this);
+        this.filterBasedOnLaunchDate = this.filterBasedOnLaunchDate.bind(this);
     }
 
     componentDidMount() {
@@ -28,6 +30,16 @@ class MissionsListingComponent extends Component {
         const utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
         const diffTime = Math.abs(utc.getTime() - date.getTime());
         return Math.ceil(diffTime / (1000 * 3600 * 24));
+    }
+
+    filterBasedOnLaunchDate(mission) {
+        const { launchDateDaysBefore } = this.props;
+        const launchDate = new Date(mission.launch_date_utc);
+        const daysBefore = this.getDaysDifference(launchDate);
+        if (launchDateDaysBefore === LaunchDateFilterConstants.SHOW_ALL) {
+            return true;
+        }
+        return (daysBefore <= launchDateDaysBefore);
     }
 
     filterBasedOnLaunchStatus(mission) {
@@ -58,7 +70,8 @@ class MissionsListingComponent extends Component {
     combineFilters(mission) {
         return this.filterBasedOnLaunchStatus(mission) &&
             this.filterBasedOnUpcomingStatus(mission) &&
-            this.filterBasedOnRocketSearch(mission);
+            this.filterBasedOnRocketSearch(mission) &&
+            this.filterBasedOnLaunchDate(mission);
     }
 
     render() {
@@ -118,6 +131,7 @@ function mapStateToProps(state) {
         missions: state.allMissions.missions,
         launchStatus: state.filters.launchStatus,
         upcomingStatus: state.filters.upcomingStatus,
+        launchDateDaysBefore: state.filters.launchDateDaysBefore,
         rocketName: state.search.rocketName
     };
 }
