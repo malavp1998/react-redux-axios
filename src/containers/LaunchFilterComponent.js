@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {Form, Checkbox, Header} from 'semantic-ui-react'
 import {updateLaunchStatusFilter} from '../redux/actions/filterActions'
 
-class FilterComponent extends Component {
+class LaunchFilterComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -23,10 +23,9 @@ class FilterComponent extends Component {
     render() {
         return (
             <div>
-                {/* <Header as='h2'>Filters</Header> */}
                 <Form>
                     <Form.Field>
-                        Launch Status
+                        <Header as='h3'>Launch Status</Header>
                     </Form.Field>
                     <Form.Field>
                         <Checkbox
@@ -51,7 +50,7 @@ class FilterComponent extends Component {
                     <Form.Field>
                         <Checkbox
                             radio
-                            label='Both'
+                            label='All'
                             name='launchRadioGroup'
                             value="undefined"
                             checked={this.props.launchStatus === undefined}
@@ -76,4 +75,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FilterComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(LaunchFilterComponent);

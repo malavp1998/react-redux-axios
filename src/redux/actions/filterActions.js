@@ -6,3 +6,10 @@ export const updateLaunchStatusFilter = (launchStatus) => {
         payload: launchStatus
     };
 };
+
+export const updateUpcomingStatusFilter = (upcomingStatus) => {
+    return {
+        type: ActionTypes.SET_UPCOMING_STATUS_FILTER,
+        payload: upcomingStatus
+    };
+};

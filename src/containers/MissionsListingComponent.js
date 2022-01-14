@@ -1,6 +1,6 @@
-import { connect } from "react-redux";
-import { Card, Icon, Image, Grid, Popup } from 'semantic-ui-react';
-import React, { Component } from 'react'
+import {connect} from "react-redux";
+import {Card, Grid, Icon, Image, Popup} from 'semantic-ui-react';
+import React, {Component} from 'react'
 import {setMissions} from "../redux/actions/missionActions";
 
 class MissionsListingComponent extends Component {
@@ -12,50 +12,70 @@ class MissionsListingComponent extends Component {
             launchDate: undefined,
             upcoming: undefined
         };
-        this.filterAndSearchMissions = this.filterAndSearchMissions.bind(this)
+        this.combineFilters = this.combineFilters.bind(this)
+        this.getDaysDifference = this.getDaysDifference.bind(this);
+        this.filterBasedOnRocketSearch = this.filterBasedOnRocketSearch.bind(this);
+        this.filterBasedOnLaunchStatus = this.filterBasedOnLaunchStatus.bind(this);
+        this.filterBasedOnUpcomingStatus = this.filterBasedOnUpcomingStatus.bind(this);
     }
 
     componentDidMount() {
         this.props.setMissions();
     }
 
-    filterAndSearchMissions(mission) {
-        const { launchStatus, rocketName } = this.props;
-        const { rocket } = mission;
-        if (launchStatus === undefined && rocketName === "") {
+    getDaysDifference(date) {
+        const now = new Date();
+        const utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+        const diffTime = Math.abs(utc.getTime() - date.getTime());
+        return Math.ceil(diffTime / (1000 * 3600 * 24));
+    }
+
+    filterBasedOnLaunchStatus(mission) {
+        const { launchStatus } = this.props;
+        if (launchStatus === undefined) {
             return true;
         }
-        else if (launchStatus === undefined) {
-            return rocket.rocket_name.toLowerCase().startsWith(rocketName.toLowerCase());
-        }
-        else if (rocketName === "") {
-            return (mission.launch_success === launchStatus);
-        }
-        else {
-            return (mission.launch_success === launchStatus)
-                && rocket.rocket_name.toLowerCase().startsWith(rocketName.toLowerCase());
-        }
+        return (mission.launch_success === launchStatus);
+    }
 
+    filterBasedOnUpcomingStatus(mission) {
+        const { upcomingStatus } = this.props;
+        if (upcomingStatus === undefined) {
+            return true;
+        }
+        return (mission.upcoming === upcomingStatus);
+    }
+
+    filterBasedOnRocketSearch(mission) {
+        const { rocket } = mission;
+        const { rocketName } = this.props;
+        if (rocketName === "") {
+            return true;
+        }
+        return rocket.rocket_name.toLowerCase().startsWith(rocketName.toLowerCase());
+    }
+
+    combineFilters(mission) {
+        return this.filterBasedOnLaunchStatus(mission) &&
+            this.filterBasedOnUpcomingStatus(mission) &&
+            this.filterBasedOnRocketSearch(mission);
     }
 
     render() {
         //const products = useSelector((state) => state.allProducts.products);
         const { missions } = this.props;
-        const missionsFiltered = [...new Set(missions.filter(this.filterAndSearchMissions))];
-        console.log("current")
-        console.log(missionsFiltered)
+        const missionsFiltered = [...new Set(missions.filter(this.combineFilters))];
         return (
             <div>
                 <Grid columns={4} padded>
                     {
                         missionsFiltered.map((mission) => {
-                            // console.log("in rend");
-                            // console.log(mission);
-                            const { flight_number, mission_name, launch_site, rocket, details, links, launch_success, launch_year } = mission;
+                            const { flight_number, mission_name, launch_site, launch_date_utc, upcoming,
+                                rocket, details, links, launch_success, launch_year } = mission;
                             const { mission_patch } = links;
                             const { site_name_long } = launch_site;
                             const { rocket_name } = rocket;
-                            //console.log(mission)
+                            const launchDate = new Date(launch_date_utc);
                             return (
                                 <Grid.Column key={flight_number}>
                                     <Popup
@@ -63,10 +83,11 @@ class MissionsListingComponent extends Component {
                                             <Card>
                                                 <Image src={mission_patch} wrapped ui={false} />
                                                 <Card.Content>
-                                                    <Card.Header>{mission_name}</Card.Header>
+                                                    <Card.Header>{mission_name} {upcoming ? " (upcoming)" : ""}</Card.Header>
                                                     <Card.Meta>
-                                                        <span className='date'>Launched <b>{launch_success ? "successfully" :
-                                                            "un-successfully"}</b>in <b>{launch_year}</b></span>
+                                                        <span className='date'>
+                                                            Launched <b> {launch_success ? "successfully" : "un-successfully"}
+                                                            </b>{this.getDaysDifference(launchDate)} days before in <b>{launch_year}</b></span>
                                                     </Card.Meta>
                                                     <Card.Description>
                                                         Launched from <i>{site_name_long}</i>
@@ -80,7 +101,7 @@ class MissionsListingComponent extends Component {
                                     >
                                         <Popup.Header>Details</Popup.Header>
                                         <Popup.Content>
-                                            {details}
+                                            {details === undefined ? "": details}
                                         </Popup.Content>
                                     </Popup>
                                 </Grid.Column>)
@@ -96,6 +117,7 @@ function mapStateToProps(state) {
     return {
         missions: state.allMissions.missions,
         launchStatus: state.filters.launchStatus,
+        upcomingStatus: state.filters.upcomingStatus,
         rocketName: state.search.rocketName
     };
 }
