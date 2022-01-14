@@ -1,15 +1,16 @@
 import { ActionTypes } from "../constants/action-types";
+import axios from "axios";
 
-export const setProducts = (products) => {
-    return {
-        type: ActionTypes.SET_PRODUCTS,
-        payload: products
-    };
-};
+export function setMissions() {
+    return function (dispatch) {
+        return axios.get(`https://api.spacexdata.com/v3/launches`)
+            .then(({data}) => dispatch({
+                type: ActionTypes.SET_MISSIONS,
+                payload: data
+            }))
+            .catch((err) => {
+                console.log("err ", err)
+            });
+    }
+}
 
-export const SelectedProduct = (products) => {
-    return {
-        type: ActionTypes.SELECTED_PRODUCT,
-        payload: products
-    };
-};

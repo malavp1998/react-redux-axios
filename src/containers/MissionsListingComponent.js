@@ -1,8 +1,9 @@
 import { connect } from "react-redux";
 import { Card, Icon, Image, Grid, Popup } from 'semantic-ui-react';
 import React, { Component } from 'react'
+import {setMissions} from "../redux/actions/productActions";
 
-class ProductComponant extends Component {
+class MissionsListingComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -11,61 +12,29 @@ class ProductComponant extends Component {
             launchDate: undefined,
             upcoming: undefined
         };
-        this.filterProduct = this.filterProduct.bind(this);
-        this.searchProductByRocketName = this.searchProductByRocketName.bind(this)
         this.filterAndSearchProduct = this.filterAndSearchProduct.bind(this)
-
-
     }
 
-    filterProduct(product) {
-        const { launchStatus } = this.props;
-        if (launchStatus === undefined) {
-            return true;
-        }
-        return product.launch_success === launchStatus;
+    componentDidMount() {
+        this.props.setMissions();
     }
-
 
     filterAndSearchProduct(product) {
-        const { launchStatus } = this.props;
-        const { rocketName } = this.props;
+        const { launchStatus, rocketName } = this.props;
         const { rocket } = product;
         if (launchStatus === undefined && rocketName === "") {
             return true;
         }
         else if (launchStatus === undefined) {
-            // console.log(rocket.rocket_name.substring(0, rocketName.length).toLowerCase());
-            // console.log(rocketName.toLowerCase())
-            // console.log("ACDS");
-            //  console.log(rocketName.toLowerCase())
-            return (rocketName.toLowerCase() === rocket.rocket_name.substring(0, rocketName.length).toLowerCase());
+            return rocket.rocket_name.toLowerCase().startsWith(rocketName.toLowerCase());
         }
         else if (rocketName === "") {
             return (product.launch_success === launchStatus);
         }
         else {
-            return (product.launch_success === launchStatus) && (rocketName.toLowerCase() === rocket.rocket_name.toLowerCase());
+            return (product.launch_success === launchStatus) && rocket.rocket_name.toLowerCase().startsWith(rocketName.toLowerCase());
         }
 
-    }
-
-
-    searchProductByRocketName(product) {
-        const { rocketName } = this.props;
-        // const rocketName ="Falcon 9";
-        const { rocket } = product;
-        // console.log("NAme");
-        // console.log(rocket.rocket_name.toLowerCase())
-        if (rocketName === "") {
-            return true;
-        }
-        else if (rocketName.toLowerCase() === rocket.rocket_name.toLowerCase()) {
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 
     render() {
@@ -128,13 +97,8 @@ function mapStateToProps(state) {
     };
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        // dispatching plain actions
-        // increment: () => dispatch({ type: 'INCREMENT' }),
-        // decrement: () => dispatch({ type: 'DECREMENT' }),
-        // reset: () => dispatch({ type: 'RESET' }),
-    }
-}
+const mapDispatchToProps =  {
+        setMissions
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductComponant);
+export default connect(mapStateToProps, mapDispatchToProps)(MissionsListingComponent);

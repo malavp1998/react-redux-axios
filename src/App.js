@@ -1,10 +1,10 @@
 import './App.css';
 import HeaderComponent from './containers/HeaderComponent';
-import ProductListing from "./containers/ProductListing";
 import FilterComponent from "./containers/FilterComponent";
 import { Segment, Header } from 'semantic-ui-react'
 import React from "react";
 import SearchComponent from './containers/SearchComponent';
+import MissionsListingComponent from "./containers/MissionsListingComponent";
 
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
           </Segment.Group> </Segment>
           <Segment compact={true}> <SearchComponent /></Segment>
         </Segment.Group>
-        <Segment><ProductListing /></Segment>
+        <Segment><MissionsListingComponent /></Segment>
       </Segment.Group>
     </div>
   );
